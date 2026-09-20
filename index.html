@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Hassan.com</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
+nav{position:sticky;top:0;background:#fff;padding:16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px #ddd;z-index:10}
+.logo{font-size:25px;font-weight:800}nav a{margin-left:12px;text-decoration:none;color:#172033}
+.hero{text-align:center;padding:80px 20px;background:linear-gradient(135deg,#eef2ff,#fff)}
+.hero h1{font-size:44px}.hero h1 span{color:#315efb}.hero p{max-width:720px;margin:20px auto;line-height:1.7;font-size:19px;color:#596274}
+.btn{display:inline-block;padding:14px 22px;border-radius:10px;text-decoration:none;font-weight:bold;margin:5px}.primary{background:#315efb;color:white}.light{background:white;color:#172033;border:1px solid #ddd}
+section{padding:60px 20px;text-align:center}section h2{font-size:34px}.grid{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}.card{background:#fff;border:1px solid #e4e7ef;border-radius:16px;padding:25px;width:280px}
+footer{padding:28px;text-align:center;background:#202a3a;color:#fff}.whatsapp{position:fixed;right:18px;bottom:18px;background:#20b35b;color:#fff;padding:18px 25px;border-radius:35px;text-decoration:none;font-weight:bold}
+#admin{display:none;min-height:100vh;padding:25px;background:#eef1f7}.panel{max-width:900px;margin:auto;background:#fff;padding:25px;border-radius:16px}
+input,textarea{width:100%;padding:12px;margin:7px 0 15px;border:1px solid #ccd2dd;border-radius:9px;font:inherit}textarea{min-height:90px}
+.adminbtn{padding:12px 18px;border:0;border-radius:9px;background:#315efb;color:#fff;font-weight:bold;margin:4px;cursor:pointer}.danger{background:#c62828}.hidden{display:none}.item{border:1px solid #ddd;padding:12px;border-radius:10px;margin:8px 0}
+@media(max-width:650px){nav{display:block}nav a{display:inline-block;margin:10px 8px 0 0}.hero h1{font-size:36px}}
+</style>
+</head>
+<body>
+<div id="site">
+<nav><div class="logo" id="siteName">Hassan.com</div><div>
+<a href="#home">Home</a><a href="#about">About</a><a href="#services">Services</a><a href="#projects">Projects</a><a href="#contact">Contact</a>
+</div></nav>
+<section class="hero" id="home"><div>Welcome to my website</div><h1>Hi, I'm <span id="owner">Hassan</span></h1>
+<p id="intro">Welcome to Hassan.com. This is my personal website where I can share my work, services and projects.</p>
+<a class="btn primary" href="#services">View Services</a><a class="btn light" href="#contact">Contact Me</a></section>
+<section id="about"><h2>About Me</h2><p id="aboutText">I am learning web development and building my own projects step by step.</p></section>
+<section id="services"><h2>Services</h2><div class="grid" id="servicesGrid"></div></section>
+<section id="projects"><h2>Projects</h2><div class="grid" id="projectsGrid"></div></section>
+<section id="contact"><h2>Contact</h2><p>Email: <span id="email">your@email.com</span></p></section>
+<a class="whatsapp" id="waBtn" href="#" target="_blank">WhatsApp</a>
+<footer>© <span id="year"></span> <span id="footerName">Hassan.com</span></footer>
+</div>
+
+<div id="admin"><div class="panel"><h1>Hassan.com Admin Panel</h1>
+<div id="loginBox"><p>Login to manage your website.</p><input id="loginUser" placeholder="Username"><input id="loginPass" type="password" placeholder="Password">
+<button class="adminbtn" onclick="login()">Login</button><p id="loginError" style="color:#c62828"></p></div>
+<div id="editor" class="hidden">
+<h2>Website Information</h2>
+<label>Website Name</label><input id="aSiteName"><label>Owner Name</label><input id="aOwner">
+<label>Intro</label><textarea id="aIntro"></textarea><label>About</label><textarea id="aAbout"></textarea>
+<label>Email</label><input id="aEmail"><label>WhatsApp Number (example: 923001234567)</label><input id="aWhatsapp">
+<h2>Services</h2><div id="serviceEditor"></div><button class="adminbtn" onclick="addService()">+ Add Service</button>
+<h2>Projects</h2><div id="projectEditor"></div><button class="adminbtn" onclick="addProject()">+ Add Project</button><br><br>
+<button class="adminbtn" onclick="saveData()">Save Changes</button><button class="adminbtn light" onclick="showSite()">View Website</button><button class="adminbtn danger" onclick="logout()">Logout</button>
+<p id="saved" style="color:green"></p>
+</div></div></div>
+
+<script>
+const DEFAULT={siteName:"Hassan.com",owner:"Hassan",intro:"Welcome to Hassan.com. This is my personal website where I can share my work, services and projects.",about:"I am learning web development and building my own projects step by step.",email:"your@email.com",whatsapp:"",services:["Web Development","Data Entry","Typing and Data Entry Services"],projects:["My Website","Hassan.com personal website"]};
+let data=JSON.parse(localStorage.getItem("hassanData")||"null")||DEFAULT;
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
+function render(){
+siteName.textContent=data.siteName;footerName.textContent=data.siteName;owner.textContent=data.owner;intro.textContent=data.intro;aboutText.textContent=data.about;email.textContent=data.email;year.textContent=new Date().getFullYear();
+servicesGrid.innerHTML=data.services.map(x=>'<div class="card"><h3>'+esc(x)+'</h3><p>Professional service available.</p></div>').join("");
+projectsGrid.innerHTML=data.projects.map(x=>'<div class="card"><h3>'+esc(x)+'</h3><p>My project and work.</p></div>').join("");
+let n=(data.whatsapp||"").replace(/\D/g,"");waBtn.href=n?"https://wa.me/"+n:"#";
+}
+function openAdmin(){site.style.display="none";admin.style.display="block";scrollTo(0,0)}
+function showSite(){admin.style.display="none";site.style.display="block";history.replaceState(null,"",location.pathname);render()}
+function login(){if(loginUser.value==="admin"&&loginPass.value==="12345"){loginBox.classList.add("hidden");editor.classList.remove("hidden");loadAdmin()}else loginError.textContent="Wrong username or password."}
+function loadAdmin(){aSiteName.value=data.siteName;aOwner.value=data.owner;aIntro.value=data.intro;aAbout.value=data.about;aEmail.value=data.email;aWhatsapp.value=data.whatsapp;draw("serviceEditor",data.services,"service");draw("projectEditor",data.projects,"project")}
+function draw(id,arr,type){document.getElementById(id).innerHTML=arr.map((x,i)=>'<div class="item"><input data-type="'+type+'" value="'+esc(x)+'"><button class="adminbtn danger" onclick="removeItem(\''+type+'\','+i+')">Remove</button></div>').join("")}
+function collect(type){return [...document.querySelectorAll('[data-type="'+type+'"]')].map(e=>e.value.trim()).filter(Boolean)}
+function addService(){data.services.push("New Service");loadAdmin()}function addProject(){data.projects.push("New Project");loadAdmin()}
+function removeItem(type,i){data[type==="service"?"services":"projects"].splice(i,1);loadAdmin()}
+function saveData(){data.siteName=aSiteName.value||"Hassan.com";data.owner=aOwner.value||"Hassan";data.intro=aIntro.value;data.about=aAbout.value;data.email=aEmail.value;data.whatsapp=aWhatsapp.value;data.services=collect("service");data.projects=collect("project");localStorage.setItem("hassanData",JSON.stringify(data));render();saved.textContent="Changes saved on this browser."}
+function logout(){location.hash="";location.reload()}
+render();if(location.hash.toLowerCase()==="#admin")openAdmin();
+</script>
+</body></html>
