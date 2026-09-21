@@ -1,190 +1,150 @@
 <!doctype html>
-<html lang="en">
+<html lang="ur">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Studio</title>
+<title>Raza AI Studio</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#080b12;color:#f5f7fb;font-family:system-ui,Arial,sans-serif}
-header{height:64px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #263044;position:sticky;top:0;background:#080b12ee;z-index:5}
-.logo{font-size:20px;font-weight:800}.logo b{color:#8b7cff}nav{display:flex;gap:18px}nav a{color:#9ca8bc;text-decoration:none}
-.hero{text-align:center;padding:65px 20px 35px}.tag{color:#aaa1ff;font-size:12px;font-weight:800;letter-spacing:2px}
-h1{font-size:clamp(42px,8vw,72px);line-height:1;margin:12px 0;background:linear-gradient(90deg,#fff,#a9a2ff);color:transparent;background-clip:text}
-.hero p{max-width:650px;margin:18px auto;color:#9ca8bc;font-size:17px}.container{max-width:1050px;margin:auto;padding:15px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.tool{background:#111722;border:1px solid #263044;border-radius:18px;padding:20px;cursor:pointer}
-.icon{font-size:28px}.tool h3{margin:12px 0 5px}.tool p{color:#9ca8bc;font-size:13px;margin:0}
-.panel{margin-top:22px;background:#111722;border:1px solid #263044;border-radius:20px;padding:22px}.panel h2{margin-top:0}
-textarea,input,select{width:100%;background:#080b12;border:1px solid #263044;border-radius:12px;color:#fff;padding:13px;font:inherit}textarea{min-height:125px;resize:vertical}
-.row{display:flex;gap:10px;flex-wrap:wrap}.field{flex:1;min-width:180px}button{border:0;border-radius:11px;padding:12px 16px;font-weight:800;cursor:pointer}.primary{background:#fff;color:#090b10}.dark{background:#1a2130;color:#fff;border:1px solid #263044}
-.output{margin-top:15px;padding:18px;border:1px dashed #39445a;border-radius:14px;color:#9ca8bc;min-height:70px}.adminbox{display:none}.adminbox.show{display:block}
-.notice{padding:13px;border-radius:12px;background:#171e2b;color:#cbd4e4;margin-top:12px}footer{text-align:center;padding:45px 20px;color:#69758a;font-size:12px}.hidden{display:none!important}
-@media(max-width:750px){nav{display:none}.grid{grid-template-columns:1fr 1fr}}@media(max-width:480px){.grid{grid-template-columns:1fr}}
-
-.adminbox{display:none}.adminbox.show{display:block}.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}.stat{background:#0b1019;border:1px solid #263044;border-radius:14px;padding:15px}.stat b{display:block;font-size:25px}.stat span{font-size:12px;color:#9ca8bc}.table-wrap{overflow-x:auto;border:1px solid #263044;border-radius:14px}.table-wrap table{width:100%;border-collapse:collapse;min-width:760px}.table-wrap th,.table-wrap td{padding:12px;border-bottom:1px solid #263044;text-align:left;font-size:13px}.table-wrap th{color:#9ca8bc;font-weight:600;background:#0d121b}.table-wrap small{display:block;color:#69758a;margin-top:3px}.pill{display:inline-block;padding:5px 8px;border-radius:20px;font-size:11px}.active,.allowed,.paid{background:#17301f;color:#8ee6a4}.blocked,.denied{background:#321a20;color:#ff9ba7}.unpaid{background:#302b18;color:#f1d47c}.actions{display:flex;gap:5px;flex-wrap:wrap}.mini{padding:7px 9px;font-size:11px;background:#1a2130;color:#fff;border:1px solid #303a4d}.permissions{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0 15px}.permissions label{padding:11px;background:#0b1019;border:1px solid #263044;border-radius:10px;color:#cbd4e4}.permissions input{width:auto;margin-right:8px}@media(max-width:600px){.admin-stats{grid-template-columns:1fr 1fr}.permissions{grid-template-columns:1fr}}
+*{box-sizing:border-box}body{margin:0;background:#080b12;color:#f4f7fb;font-family:system-ui,Arial,sans-serif}
+header{position:sticky;top:0;z-index:10;height:64px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;background:#080b12ee;border-bottom:1px solid #273044;backdrop-filter:blur(10px)}
+.logo{font-size:21px;font-weight:800}.logo b{color:#8b7cff}.nav{display:flex;gap:12px;flex-wrap:wrap}.nav a{color:#aab4c7;text-decoration:none;font-size:14px}
+main{max-width:1150px;margin:auto;padding:28px 5% 60px}.hero{padding:25px 0 18px}.hero h1{font-size:clamp(30px,6vw,56px);margin:0 0 10px}.hero p{color:#aab4c7;max-width:750px;line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:20px 0}.card{background:#101622;border:1px solid #273044;border-radius:16px;padding:16px;cursor:pointer;transition:.2s}.card:hover,.card.active{border-color:#8b7cff;transform:translateY(-2px)}.icon{font-size:28px}.card h3{margin:8px 0 4px;font-size:16px}.muted{color:#8f9bb0;font-size:13px}
+.workspace{background:#0e141f;border:1px solid #273044;border-radius:18px;padding:18px;margin-top:18px}.row{display:grid;grid-template-columns:1fr 180px;gap:12px}.row2{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+textarea,input,select{width:100%;background:#080d15;color:#fff;border:1px solid #303b51;border-radius:12px;padding:13px;font:inherit}textarea{min-height:130px;resize:vertical}
+button{border:0;border-radius:12px;padding:12px 17px;background:#8b7cff;color:#fff;font-weight:700;cursor:pointer}button.secondary{background:#202a3b}button:disabled{opacity:.55;cursor:not-allowed}
+.status{margin-top:12px;color:#aab4c7;min-height:24px}.result{margin-top:16px;padding:12px;border-radius:14px;background:#080d15;border:1px solid #273044;overflow:hidden}.result img,.result video{max-width:100%;border-radius:12px}.result pre{white-space:pre-wrap;word-break:break-word;line-height:1.55;margin:0}.download{display:inline-block;margin-top:10px;color:#fff;background:#202a3b;padding:9px 12px;border-radius:10px;text-decoration:none}
+.admin{margin-top:35px}.adminbox{background:#0e141f;border:1px solid #273044;border-radius:18px;padding:18px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{background:#101622;border:1px solid #273044;padding:14px;border-radius:13px}.stat b{font-size:24px;display:block}.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:14px}.tools label{background:#101622;border:1px solid #273044;padding:10px;border-radius:10px}
+small.note{display:block;color:#7f8ba0;margin-top:10px;line-height:1.5}
+@media(max-width:650px){.row{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}header{height:auto;min-height:64px;padding:10px 5%;gap:10px;align-items:flex-start}.nav{justify-content:flex-end}}
 </style>
 </head>
 <body>
-<header><div class="logo">✨ <b>AI</b> Studio</div><nav><a href="#tools">Tools</a><a href="#admin">Admin</a></nav></header>
-<section class="hero"><div class="tag">ALL-IN-ONE AI PLATFORM</div><h1>Create Anything<br>With AI</h1><p>Images, cartoons, video, writing, chat and more.</p></section>
-<main class="container">
-<section id="tools" class="grid">
-<div class="tool" onclick="openTool('image')"><div class="icon">🖼️</div><h3>AI Image</h3><p>Text to image</p></div>
-<div class="tool" onclick="openTool('cartoon')"><div class="icon">🎨</div><h3>AI Cartoon</h3><p>Cartoon creation</p></div>
-<div class="tool" onclick="openTool('video')"><div class="icon">🎬</div><h3>AI Video</h3><p>Text to video</p></div>
-<div class="tool" onclick="openTool('chat')"><div class="icon">🤖</div><h3>AI Chat</h3><p>AI assistant</p></div>
-<div class="tool" onclick="openTool('writer')"><div class="icon">✍️</div><h3>AI Writer</h3><p>Writing tools</p></div>
-<div class="tool" onclick="openTool('voice')"><div class="icon">🗣️</div><h3>Text to Voice</h3><p>Voice generation</p></div>
-<div class="tool" onclick="openTool('remove')"><div class="icon">🪄</div><h3>Background Remover</h3><p>Remove backgrounds</p></div>
-<div class="tool" onclick="openTool('upscale')"><div class="icon">🔍</div><h3>Image Upscaler</h3><p>Improve resolution</p></div>
-<div class="tool" onclick="openTool('translate')"><div class="icon">🌐</div><h3>Translator</h3><p>Translate text</p></div>
+<header><div class="logo">Raza <b>AI Studio</b></div><div class="nav"><a href="#tools">Tools</a><a href="#admin">Admin</a></div></header>
+<main>
+<section class="hero">
+<h1>AI Tools — Free Start</h1>
+<p>ایک ہی جگہ پر Image، Cartoon، Chat، Writer، Voice، Translator اور دوسرے tools۔ Free/demo limits browser میں محفوظ رہیں گی۔</p>
 </section>
 
-<section class="panel" id="workspace">
-<h2 id="toolTitle">Select an AI tool</h2><p id="toolDesc" style="color:#9ca8bc">Choose a tool above.</p>
-<textarea id="prompt" placeholder="Write your prompt here..."></textarea><br><br>
-<div class="row"><select class="field" id="style"><option>Default</option><option>Photorealistic</option><option>3D Cartoon</option><option>Anime</option><option>Cinematic</option></select><button class="primary" onclick="runTool()">Generate / Run</button></div>
-<div id="output" class="output">Your result will appear here.</div>
-</section>
-
-<section class="panel" id="admin">
-<h2>🛡️ Admin Control Center</h2>
-<p style="color:#9ca8bc">Manage users, access, plans and AI tools from one dashboard.</p>
-
-<div class="row">
-  <input class="field" id="adminPassword" type="password" placeholder="Admin password">
-  <button class="primary" onclick="adminLogin()">Admin Login</button>
+<section id="tools">
+<div class="grid" id="cards">
+<div class="card active" data-tool="image"><div class="icon">🖼️</div><h3>AI Image</h3><div class="muted">Text سے تصویر</div></div>
+<div class="card" data-tool="cartoon"><div class="icon">🎨</div><h3>AI Cartoon</h3><div class="muted">Cartoon style</div></div>
+<div class="card" data-tool="chat"><div class="icon">🤖</div><h3>AI Chat</h3><div class="muted">سوال پوچھیں</div></div>
+<div class="card" data-tool="writer"><div class="icon">✍️</div><h3>AI Writer</h3><div class="muted">Story/Article</div></div>
+<div class="card" data-tool="voice"><div class="icon">🔊</div><h3>Text to Voice</h3><div class="muted">Browser آواز</div></div>
+<div class="card" data-tool="translate"><div class="icon">🌐</div><h3>Translator</h3><div class="muted">English/Urdu</div></div>
+<div class="card" data-tool="upscale"><div class="icon">🔍</div><h3>Image Upscaler</h3><div class="muted">2× browser upscale</div></div>
+<div class="card" data-tool="bg"><div class="icon">🪄</div><h3>Background</h3><div class="muted">Local image tool</div></div>
+<div class="card" data-tool="video"><div class="icon">🎬</div><h3>Story Video</h3><div class="muted">Image scenes → video</div></div>
 </div>
 
-<div id="adminBox" class="adminbox">
-  <div class="notice">✅ Admin mode active</div>
+<div class="workspace">
+<div class="row">
+<textarea id="prompt" placeholder="مثال: ایک پیاسا کوا ایک باغ میں پانی کا گھڑا دیکھ رہا ہے، بچوں کی کارٹون style"></textarea>
+<select id="style">
+<option value="cinematic">Cinematic</option><option value="cartoon">Cartoon</option><option value="realistic">Realistic</option><option value="anime">Anime</option>
+</select>
+</div>
+<div class="row2">
+<button id="run">Generate / Run</button>
+<button class="secondary" id="clear">Clear</button>
+<input id="file" type="file" accept="image/*" style="max-width:260px">
+</div>
+<div class="status" id="status"></div>
+<div class="result" id="result">Tool منتخب کریں اور Generate دبائیں۔</div>
+</div>
+</section>
 
-  <div class="admin-stats">
-    <div class="stat"><b id="totalUsers">4</b><span>Total Users</span></div>
-    <div class="stat"><b id="activeUsers">3</b><span>Active</span></div>
-    <div class="stat"><b id="paidUsers">2</b><span>Paid</span></div>
-    <div class="stat"><b id="blockedUsers">1</b><span>Blocked</span></div>
-  </div>
-
-  <h3>👥 User Management</h3>
-  <div class="table-wrap">
-    <table id="usersTable">
-      <thead><tr><th>User</th><th>Status</th><th>Plan</th><th>AI Permission</th><th>Actions</th></tr></thead>
-      <tbody>
-        <tr data-user="Ali">
-          <td><b>Ali</b><small>ali@example.com</small></td>
-          <td class="statusCell"><span class="pill active">Active</span></td>
-          <td class="planCell"><span class="pill paid">Paid</span></td>
-          <td><span class="pill allowed">Allowed</span></td>
-          <td class="actions">
-            <button class="mini" onclick="toggleUser(this)">Block</button>
-            <button class="mini" onclick="togglePlan(this)">Make Unpaid</button>
-            <button class="mini" onclick="togglePermission(this)">Remove AI</button>
-          </td>
-        </tr>
-        <tr data-user="Hassan">
-          <td><b>Hassan</b><small>hassan@example.com</small></td>
-          <td class="statusCell"><span class="pill active">Active</span></td>
-          <td class="planCell"><span class="pill unpaid">Unpaid</span></td>
-          <td><span class="pill allowed">Allowed</span></td>
-          <td class="actions">
-            <button class="mini" onclick="toggleUser(this)">Block</button>
-            <button class="mini" onclick="togglePlan(this)">Make Paid</button>
-            <button class="mini" onclick="togglePermission(this)">Remove AI</button>
-          </td>
-        </tr>
-        <tr data-user="Usman">
-          <td><b>Usman</b><small>usman@example.com</small></td>
-          <td class="statusCell"><span class="pill blocked">Blocked</span></td>
-          <td class="planCell"><span class="pill unpaid">Unpaid</span></td>
-          <td><span class="pill denied">Denied</span></td>
-          <td class="actions">
-            <button class="mini" onclick="toggleUser(this)">Unblock</button>
-            <button class="mini" onclick="togglePlan(this)">Make Paid</button>
-            <button class="mini" onclick="togglePermission(this)">Allow AI</button>
-          </td>
-        </tr>
-        <tr data-user="Ayesha">
-          <td><b>Ayesha</b><small>ayesha@example.com</small></td>
-          <td class="statusCell"><span class="pill active">Active</span></td>
-          <td class="planCell"><span class="pill paid">Paid</span></td>
-          <td><span class="pill allowed">Allowed</span></td>
-          <td class="actions">
-            <button class="mini" onclick="toggleUser(this)">Block</button>
-            <button class="mini" onclick="togglePlan(this)">Make Unpaid</button>
-            <button class="mini" onclick="togglePermission(this)">Remove AI</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <h3>🤖 AI Tool Permissions</h3>
-  <div class="permissions">
-    <label><input type="checkbox" checked> AI Image</label>
-    <label><input type="checkbox" checked> AI Cartoon</label>
-    <label><input type="checkbox" checked> AI Video</label>
-    <label><input type="checkbox" checked> AI Chat</label>
-    <label><input type="checkbox" checked> AI Writer</label>
-    <label><input type="checkbox" checked> Text to Voice</label>
-    <label><input type="checkbox" checked> Background Remover</label>
-    <label><input type="checkbox" checked> Image Upscaler</label>
-  </div>
-  <button class="primary" onclick="saveSettings()">Save AI Permissions</button>
-
-  <h3>💳 User Plan</h3>
-  <div class="row">
-    <select id="planSelect" class="field">
-      <option>Free</option><option>Paid</option><option>VIP</option><option>Admin</option>
-    </select>
-    <button class="dark" onclick="alert('Plan saved for the selected user in this demo.')">Save Plan</button>
-  </div>
-
-  <h3>⚙️ Website Controls</h3>
-  <div class="row">
-    <button class="dark" onclick="toggleTools()">Show / Hide AI Tools</button>
-    <button class="dark" onclick="maintenance()">Maintenance Mode</button>
-    <button class="dark" onclick="alert('Real user database should be connected here.')">Database</button>
-  </div>
+<section class="admin" id="admin">
+<div class="adminbox">
+<h2>🔐 Admin Panel (Demo)</h2>
+<div class="row2"><input id="adminPass" type="password" placeholder="Admin password"><button id="login">Login</button></div>
+<div class="status" id="adminStatus"></div>
+<div id="adminArea" style="display:none">
+<div class="stats">
+<div class="stat"><span class="muted">Total Users</span><b id="users">12</b></div>
+<div class="stat"><span class="muted">Active</span><b id="active">10</b></div>
+<div class="stat"><span class="muted">Paid</span><b id="paid">3</b></div>
+<div class="stat"><span class="muted">Blocked</span><b id="blocked">2</b></div>
+</div>
+<div class="tools">
+<label><input type="checkbox" checked> AI Image</label><label><input type="checkbox" checked> AI Cartoon</label>
+<label><input type="checkbox" checked> AI Chat</label><label><input type="checkbox" checked> AI Writer</label>
+<label><input type="checkbox" checked> Text to Voice</label><label><input type="checkbox" checked> Translator</label>
+<label><input type="checkbox" checked> Story Video</label><label><input type="checkbox" checked> Maintenance Mode</label>
+</div>
+<small class="note">یہ admin section ابھی browser-demo ہے۔ اصل users، paid plans اور secure permissions کے لیے Firebase/Supabase backend لگانا ہوگا۔ Password کو production میں frontend code میں نہ رکھیں۔</small>
+</div>
 </div>
 </section>
 </main>
-<footer>AI Studio · GitHub Pages starter</footer>
+
 <script>
-let currentTool="";
-const titles={image:["AI Image Generator","Describe your image."],cartoon:["AI Cartoon Generator","Describe your cartoon."],video:["AI Video Generator","Describe your video."],chat:["AI Chat","Ask your AI assistant."],writer:["AI Writer","Tell the AI what to write."],voice:["Text to Voice","Enter text for voice."],remove:["Background Remover","Image processing tool."],upscale:["Image Upscaler","Image enhancement tool."],translate:["AI Translator","Enter text and target language."]};
-function openTool(t){currentTool=t;toolTitle.textContent=titles[t][0];toolDesc.textContent=titles[t][1];prompt.placeholder="Write your prompt here...";output.textContent="Ready.";location.hash="workspace"}
-function runTool(){const p=prompt.value.trim();if(!p){output.textContent="Please enter a prompt first.";return}if(currentTool==="image"||currentTool==="cartoon"){output.textContent="Generating image...";const q=encodeURIComponent(p+", "+style.value);const url="https://image.pollinations.ai/prompt/"+q+"?width=768&height=768&nologo=true&seed="+Math.floor(Math.random()*999999);output.innerHTML='<img style="max-width:100%;border-radius:12px" src="'+url+'" alt="AI image" onerror="this.parentElement.textContent=\'Image service unavailable.\'">'}else output.textContent="Interface ready. Connect a secure AI API/backend for real "+titles[currentTool][0]+"."}
-function adminLogin(){
-if(adminPassword.value==="admin-demo"){adminBox.classList.add("show");alert("Admin panel unlocked.");}
-else alert("Demo password incorrect.");
+const state={tool:"image", imgCount:0, chatCount:0};
+const $=id=>document.getElementById(id);
+const cards=[...document.querySelectorAll(".card")];
+cards.forEach(c=>c.onclick=()=>{cards.forEach(x=>x.classList.remove("active"));c.classList.add("active");state.tool=c.dataset.tool; updateUI();});
+function updateUI(){
+ const names={image:"تصویر بنانے کی description لکھیں",cartoon:"Cartoon scene لکھیں",chat:"اپنا سوال لکھیں",writer:"Story/Article کا موضوع لکھیں",voice:"جس text کو آواز دینا ہے وہ لکھیں",translate:"ترجمہ کے لیے text لکھیں",upscale:"تصویر upload کریں، پھر Generate دبائیں",bg:"تصویر upload کریں؛ basic preview تیار ہوگا",video:"Story لکھیں؛ scenes کی images تیار ہوں گی"};
+ $("prompt").placeholder=names[state.tool]||"Prompt لکھیں";
 }
-function toggleUser(btn){
-const row=btn.closest("tr"), cell=row.querySelector(".statusCell"), pill=cell.querySelector(".pill");
-if(pill.classList.contains("blocked")){pill.className="pill active";pill.textContent="Active";btn.textContent="Block";}
-else{pill.className="pill blocked";pill.textContent="Blocked";btn.textContent="Unblock";}
-updateStats();
+$("clear").onclick=()=>{$("prompt").value="";$("result").innerHTML="";$("status").textContent="";};
+
+function imgURL(prompt, style){
+ return "https://image.pollinations.ai/prompt/"+encodeURIComponent(prompt+" | "+style+" style, high quality")+
+ "?width=768&height=768&nologo=true&seed="+Math.floor(Math.random()*999999);
 }
-function togglePlan(btn){
-const row=btn.closest("tr"), cell=row.querySelector(".planCell"), pill=cell.querySelector(".pill");
-if(pill.classList.contains("paid")){pill.className="pill unpaid";pill.textContent="Unpaid";btn.textContent="Make Paid";}
-else{pill.className="pill paid";pill.textContent="Paid";btn.textContent="Make Unpaid";}
-updateStats();
+async function textAI(prompt){
+ const url="https://text.pollinations.ai/"+encodeURIComponent(prompt)+"?model=openai";
+ const r=await fetch(url); if(!r.ok) throw new Error("AI text request failed");
+ return await r.text();
 }
-function togglePermission(btn){
-const row=btn.closest("tr"), pill=row.cells[3].querySelector(".pill");
-if(pill.classList.contains("allowed")){pill.className="pill denied";pill.textContent="Denied";btn.textContent="Allow AI";}
-else{pill.className="pill allowed";pill.textContent="Allowed";btn.textContent="Remove AI";}
+function showImg(url,title="Generated"){
+ $("result").innerHTML="<h3>"+title+"</h3><img src='"+url+"' alt='AI result'><br><a class='download' target='_blank' href='"+url+"'>Open / Save Image</a>";
 }
-function updateStats(){
-const rows=[...document.querySelectorAll("#usersTable tbody tr")];
-totalUsers.textContent=rows.length;
-activeUsers.textContent=rows.filter(r=>r.querySelector(".statusCell .pill").classList.contains("active")).length;
-paidUsers.textContent=rows.filter(r=>r.querySelector(".planCell .pill").classList.contains("paid")).length;
-blockedUsers.textContent=rows.filter(r=>r.querySelector(".statusCell .pill").classList.contains("blocked")).length;
+function speak(text){
+ if(!("speechSynthesis" in window)){ $("status").textContent="اس browser میں Text-to-Speech available نہیں ہے۔"; return; }
+ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); u.lang=/[\u0600-\u06FF]/.test(text)?"ur-PK":"en-US"; u.rate=.95; speechSynthesis.speak(u); $("status").textContent="🔊 آواز چل رہی ہے۔";
 }
-function saveSettings(){alert("AI tool permissions saved in this demo.")}
-function toggleTools(){tools.classList.toggle("hidden")}
-function maintenance(){document.body.innerHTML='<div style="font-family:system-ui;text-align:center;padding:25vh 20px"><h1>🔧 Maintenance Mode</h1><p>Website temporarily unavailable.</p><button onclick="location.reload()">Return</button></div>'}
+async function translateText(text){
+ const r=await fetch("https://api.mymemory.translated.net/get?q="+encodeURIComponent(text)+"&langpair=en|ur");
+ const j=await r.json(); return j.responseData?.translatedText||"Translation unavailable";
+}
+function videoFromImage(url){
+ $("result").innerHTML="<h3>Story Video</h3><p>Free browser mode: image کو short motion video میں بدل رہا ہے۔</p><video id='vid' controls autoplay muted></video>";
+ const v=$("vid"), canvas=document.createElement("canvas"),ctx=canvas.getContext("2d"); canvas.width=768;canvas.height=768;
+ const im=new Image(); im.crossOrigin="anonymous"; im.onload=()=>{
+  const stream=canvas.captureStream(24); const rec=new MediaRecorder(stream,{mimeType:"video/webm"});let chunks=[];
+  rec.ondataavailable=e=>e.data.size&&chunks.push(e.data); rec.onstop=()=>{const blob=new Blob(chunks,{type:"video/webm"});const u=URL.createObjectURL(blob);v.src=u;$("result").insertAdjacentHTML("beforeend","<br><a class='download' download='raza-story-video.webm' href='"+u+"'>Download Video</a>");};
+  let t=0; rec.start(); const draw=()=>{ctx.fillStyle="#000";ctx.fillRect(0,0,768,768);let s=1+Math.sin(t/50)*.025;ctx.save();ctx.translate(384,384);ctx.scale(s,s);ctx.drawImage(im,-384,-384,768,768);ctx.restore();t++;if(t<120){requestAnimationFrame(draw)}else rec.stop()};draw();
+ };
+ im.src=url;
+}
+$("run").onclick=async()=>{
+ const p=$("prompt").value.trim(); $("status").textContent="⏳ کام ہو رہا ہے..."; $("result").innerHTML="";
+ try{
+  if(state.tool==="image"){if(!p)throw Error("Prompt لکھیں");showImg(imgURL(p,$("style").value),"AI Image");}
+  else if(state.tool==="cartoon"){if(!p)throw Error("Cartoon prompt لکھیں");showImg(imgURL(p+", cute colorful 2D cartoon, clean characters","cartoon"),"AI Cartoon");}
+  else if(state.tool==="chat"){if(!p)throw Error("سوال لکھیں");state.chatCount++;let x=await textAI("Answer the user's question clearly. If the user writes Urdu/Roman Urdu, answer in the same language. User: "+p);$("result").innerHTML="<pre>"+escapeHtml(x)+"</pre>";}
+  else if(state.tool==="writer"){if(!p)throw Error("موضوع لکھیں");let x=await textAI("Write a useful Urdu/Roman Urdu story or article about: "+p);$("result").innerHTML="<pre>"+escapeHtml(x)+"</pre>";}
+  else if(state.tool==="voice"){if(!p)throw Error("Text لکھیں");$("result").innerHTML="<p>Text-to-Voice browser میں چل رہا ہے۔</p><button id='stopVoice' class='secondary'>Stop</button>";speak(p);$("stopVoice").onclick=()=>speechSynthesis.cancel();}
+  else if(state.tool==="translate"){if(!p)throw Error("Text لکھیں");let x=await translateText(p);$("result").innerHTML="<pre>"+escapeHtml(x)+"</pre>";}
+  else if(state.tool==="upscale"){if(!$("file").files[0])throw Error("Image upload کریں");let im=new Image();im.onload=()=>{let c=document.createElement("canvas");c.width=im.width*2;c.height=im.height*2;c.getContext("2d").drawImage(im,0,0,c.width,c.height);let u=c.toDataURL("image/jpeg",.92);showImg(u,"2× Upscaled Image")};im.src=URL.createObjectURL($("file").files[0]);}
+  else if(state.tool==="bg"){if(!$("file").files[0])throw Error("Image upload کریں");let u=URL.createObjectURL($("file").files[0]);showImg(u,"Uploaded Image (basic mode)");$("status").textContent="یہ basic/free preview ہے؛ حقیقی AI background removal کے لیے backend API درکار ہوگی۔";}
+  else if(state.tool==="video"){if(!p)throw Error("Story لکھیں");let x=await textAI("Create one detailed visual scene prompt for this story, no dialogue: "+p);let u=imgURL(x,"cinematic story scene");showImg(u,"Story Scene");setTimeout(()=>videoFromImage(u),300);}
+  $("status").textContent="✅ مکمل";
+ }catch(e){$("status").textContent="❌ "+e.message;}
+};
+function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
+
+$("login").onclick=()=>{
+ if($("adminPass").value==="admin-demo"){$("adminArea").style.display="block";$("adminStatus").textContent="✅ Admin login successful";localStorage.setItem("razaAdmin","1");}
+ else $("adminStatus").textContent="❌ غلط password";
+};
+if(localStorage.getItem("razaAdmin")==="1"){$("adminArea").style.display="block";$("adminStatus").textContent="Admin session active";}
+updateUI();
 </script>
 </body>
 </html>
