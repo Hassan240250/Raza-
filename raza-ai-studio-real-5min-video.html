@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="ur" dir="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Raza AI Studio</title>
+<style>
+:root{--bg:#080b12;--card:#111827;--line:#273449;--txt:#f7f8fb;--muted:#9aa7bb;--pri:#7c5cff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:Arial,system-ui,sans-serif}
+header{position:sticky;top:0;z-index:5;background:#080b12f2;border-bottom:1px solid var(--line);padding:14px 5%;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:21px;font-weight:800}.logo span{color:#8d7cff}nav a{color:var(--muted);text-decoration:none;margin-left:14px}
+main{max-width:1100px;margin:auto;padding:28px 5% 60px}.hero h1{font-size:clamp(32px,7vw,58px);margin:15px 0 8px}.hero p{color:var(--muted);line-height:1.7}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px;margin:24px 0}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:15px;cursor:pointer}.card.active{border-color:var(--pri);box-shadow:0 0 0 1px var(--pri)}.icon{font-size:27px}.card h3{font-size:15px;margin:8px 0 4px}.muted{font-size:12px;color:var(--muted)}
+.box{background:#0d1420;border:1px solid var(--line);border-radius:18px;padding:17px;margin-top:16px}
+textarea,input,select{width:100%;background:#080d15;color:#fff;border:1px solid #344158;border-radius:11px;padding:12px;font:inherit}textarea{min-height:135px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 180px;gap:10px}.buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:10px}
+button{border:0;border-radius:11px;padding:12px 16px;background:var(--pri);color:white;font-weight:bold;cursor:pointer}button.alt{background:#263247}
+#status{min-height:24px;color:#aeb9ca;margin-top:10px}.result{margin-top:13px;background:#080d15;border:1px solid var(--line);border-radius:13px;padding:13px;overflow:auto}.result img{max-width:100%;border-radius:10px}.result pre{white-space:pre-wrap;line-height:1.6}
+.download{display:inline-block;background:#263247;color:#fff;padding:9px 12px;border-radius:9px;text-decoration:none;margin-top:8px}
+.admin{margin-top:30px}.hide{display:none}.video-stage{position:relative;text-align:center}.video-stage img{width:100%;max-height:520px;object-fit:cover}.video-caption{padding:10px;font-size:15px;line-height:1.6}.progress{height:8px;background:#263247;border-radius:99px;overflow:hidden;margin-top:10px}.progress i{display:block;height:100%;width:0;background:var(--pri)}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.stat{background:#111827;border:1px solid var(--line);border-radius:11px;padding:12px}.stat b{display:block;font-size:22px;margin-top:4px}
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:12px}.checks label{background:#111827;border:1px solid var(--line);padding:10px;border-radius:9px}
+.note{color:var(--muted);font-size:12px;line-height:1.6}.userbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}.pill{padding:7px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px}
+@media(max-width:650px){.row{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}nav{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Raza <span>AI Studio</span></div>
+  <nav><a href="#tools">Tools</a><a href="#account">Account</a><a href="#admin">Admin</a></nav>
+</header>
+
+<main>
+<section class="hero">
+  <h1>AI Studio</h1>
+  <p>AI Image, Cartoon, Chat, Writer, Voice, Translator, Upscaler اور Story tools.</p>
+  <div class="userbar">
+    <span class="pill" id="connection">Supabase: connecting...</span>
+    <span class="pill" id="userState">Not logged in</span>
+  </div>
+</section>
+
+<section id="account">
+<div class="box">
+  <h2>👤 Account</h2>
+  <div class="row">
+    <input id="email" type="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password (min 6 chars)">
+  </div>
+  <div class="buttons">
+    <button id="signup">Create account</button>
+    <button id="signin">Login</button>
+    <button class="alt" id="signout">Logout</button>
+  </div>
+  <div id="authMsg" class="note"></div>
+</div>
+</section>
+
+<section id="tools">
+<div class="grid">
+<div class="card active" data-tool="image">🖼️<h3>AI Image</h3><div class="muted">Text → image</div></div>
+<div class="card" data-tool="cartoon">🎨<h3>AI Cartoon</h3><div class="muted">Cartoon image</div></div>
+<div class="card" data-tool="chat">🤖<h3>AI Chat</h3><div class="muted">AI question</div></div>
+<div class="card" data-tool="writer">✍️<h3>AI Writer</h3><div class="muted">Story / article</div></div>
+<div class="card" data-tool="voice">🔊<h3>Text to Voice</h3><div class="muted">Browser voice</div></div>
+<div class="card" data-tool="translate">🌐<h3>Translator</h3><div class="muted">English ↔ Urdu</div></div>
+<div class="card" data-tool="upscale">🔍<h3>Upscaler</h3><div class="muted">2× local image</div></div>
+<div class="card" data-tool="video">🎬<h3>Story Video</h3><div class="muted">Scene generator</div></div>
+</div>
+
+<div class="box">
+<div class="row">
+  <textarea id="prompt" placeholder="مثال: ایک پیاسا کوا پانی کے گھڑے کے پاس کھڑا ہے"></textarea>
+  <div>
+      <select id="style"><option>realistic</option><option>cartoon</option><option>anime</option><option>cinematic</option></select>
+      <select id="videoDuration" style="margin-top:8px">
+        <option value="300">5 minutes</option>
+        <option value="360">6 minutes</option>
+        <option value="420">7 minutes</option>
+        <option value="600">10 minutes</option>
+      </select>
+    </div>
+</div>
+<div class="buttons">
+  <button id="run">Generate / Run</button>
+  <button class="alt" id="clear">Clear</button>
+  <input id="file" type="file" accept="image/*" style="max-width:260px">
+</div>
+<div id="status"></div>
+<div class="result" id="result">Tool منتخب کریں۔</div>
+</div>
+</section>
+
+<section id="admin" class="admin">
+<div class="box">
+  <h2>🔐 Admin</h2>
+  <p class="note">Admin management ko production mein Supabase Auth + RLS/Edge Function se secure karna chahiye. Is page mein demo admin password intentionally nahi rakha gaya.</p>
+  <div id="adminMsg" class="note">Login ke baad server-side admin role add kiya ja sakta hai.</div>
+</div>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ==========================================================
+   1) YAHAN APNI SUPABASE DETAILS PASTE KARNI HAIN
+   Supabase Dashboard → Project Settings → API
+   URL = Project URL
+   Key = Publishable key (client-side key)
+   Secret/service_role key YAHAN KABHI NA LAGAYEN.
+   ========================================================== */
+const SUPABASE_URL = "PASTE_YOUR_SUPABASE_PROJECT_URL_HERE";
+const SUPABASE_PUBLISHABLE_KEY = "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
+
+let supabaseClient = null;
+const $ = x => document.getElementById(x);
+const state = {tool:"image", videoPlan:[], videoTimer:null, videoRunning:false};
+
+function configured(){
+  return SUPABASE_URL.startsWith("https://") &&
+         !SUPABASE_URL.includes("PASTE_") &&
+         SUPABASE_PUBLISHABLE_KEY &&
+         !SUPABASE_PUBLISHABLE_KEY.includes("PASTE_");
+}
+
+async function initSupabase(){
+  if(!configured()){
+    $("connection").textContent = "Supabase: add URL + publishable key";
+    return;
+  }
+  try{
+    supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+    $("connection").textContent = "Supabase: connected ✅";
+    const {data:{session}} = await supabaseClient.auth.getSession();
+    updateUser(session);
+    supabaseClient.auth.onAuthStateChange((_event, session) => updateUser(session));
+  }catch(e){
+    $("connection").textContent = "Supabase: connection error";
+    console.error(e);
+  }
+}
+
+function updateUser(session){
+  $("userState").textContent = session?.user?.email
+    ? "Logged in: " + session.user.email
+    : "Not logged in";
+}
+
+$("signup").onclick = async () => {
+  if(!supabaseClient) return $("authMsg").textContent = "Pehle Supabase URL/key add karein.";
+  const email = $("email").value.trim();
+  const password = $("password").value;
+  if(!email || password.length < 6) return $("authMsg").textContent = "Email aur kam az kam 6 characters ka password dein.";
+  $("authMsg").textContent = "⏳ Account ban raha hai...";
+  const {error} = await supabaseClient.auth.signUp({email,password});
+  $("authMsg").textContent = error
+    ? "❌ " + error.message
+    : "✅ Account create ho gaya. Agar email confirmation on hai to email verify karein.";
+};
+
+$("signin").onclick = async () => {
+  if(!supabaseClient) return $("authMsg").textContent = "Pehle Supabase URL/key add karein.";
+  const email = $("email").value.trim();
+  const password = $("password").value;
+  $("authMsg").textContent = "⏳ Login...";
+  const {error} = await supabaseClient.auth.signInWithPassword({email,password});
+  $("authMsg").textContent = error ? "❌ " + error.message : "✅ Login successful";
+};
+
+$("signout").onclick = async () => {
+  if(!supabaseClient) return;
+  const {error} = await supabaseClient.auth.signOut();
+  $("authMsg").textContent = error ? "❌ " + error.message : "✅ Logout ho gaya";
+};
+
+async function logUsage(tool){
+  if(!supabaseClient) return;
+  const {data:{session}} = await supabaseClient.auth.getSession();
+  if(!session?.user?.id) return;
+  // Agar usage_logs table abhi nahi bani to tool phir bhi chalega.
+  try{
+    await supabaseClient.from("usage_logs").insert({
+      user_id: session.user.id,
+      tool: tool
+    });
+  }catch(e){ console.warn("usage log skipped",e); }
+}
+
+document.querySelectorAll(".card").forEach(c => c.onclick = () => {
+  document.querySelectorAll(".card").forEach(x => x.classList.remove("active"));
+  c.classList.add("active");
+  state.tool = c.dataset.tool;
+  stopStoryVideo();
+  $("videoControls").classList.toggle("hide", state.tool!=="video");
+  setPlaceholder();
+});
+
+function setPlaceholder(){
+  const x = {
+    image:"تصویر کی description لکھیں",
+    cartoon:"Cartoon scene لکھیں",
+    chat:"اپنا سوال لکھیں",
+    writer:"Story یا article کا موضوع لکھیں",
+    voice:"Text لکھیں",
+    translate:"English یا Urdu text لکھیں",
+    upscale:"Image upload کریں",
+    video:"اپنی story لکھیں"
+  };
+  $("prompt").placeholder = x[state.tool];
+}
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[c]));
+}
+
+function imageURL(t,style){
+  return "https://image.pollinations.ai/prompt/" +
+    encodeURIComponent(t+", "+style+", high quality") +
+    "?width=768&height=768&nologo=true&seed="+Date.now();
+}
+
+function showImage(u,title){
+  $("result").innerHTML =
+    "<h3>"+esc(title)+"</h3><img src='"+u+"'>" +
+    "<br><a class='download' target='_blank' href='"+u+"'>Open / Save</a>";
+}
+
+async function textAI(t){
+  const r = await fetch("https://text.pollinations.ai/"+encodeURIComponent(t));
+  if(!r.ok) throw Error("Text AI unavailable");
+  return await r.text();
+}
+
+function speak(t){
+  if(!("speechSynthesis" in window)) throw Error("Text-to-Speech supported nahi hai");
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t);
+  u.lang = /[\u0600-\u06ff]/.test(t) ? "ur-PK" : "en-US";
+  speechSynthesis.speak(u);
+}
+
+async function translate(t){
+  const r = await fetch(
+    "https://api.mymemory.translated.net/get?q="+encodeURIComponent(t)+"&langpair=en|ur"
+  );
+  if(!r.ok) throw Error("Translator unavailable");
+  const j = await r.json();
+  return j.responseData?.translatedText || "Translation unavailable";
+}
+
+$("run").onclick = async () => {
+  const p = $("prompt").value.trim();
+  $("status").textContent = "⏳ Working...";
+  $("result").innerHTML = "";
+  try{
+    if(state.tool==="image"){
+      if(!p) throw Error("Prompt لکھیں");
+      showImage(imageURL(p,$("style").value),"AI Image");
+    }
+    else if(state.tool==="cartoon"){
+      if(!p) throw Error("Prompt لکھیں");
+      showImage(imageURL(p+", cute 2D cartoon",$("style").value),"AI Cartoon");
+    }
+    else if(state.tool==="chat"){
+      if(!p) throw Error("سوال لکھیں");
+      const x = await textAI("Answer clearly in the same language as the user. User question: "+p);
+      $("result").innerHTML = "<pre>"+esc(x)+"</pre>";
+    }
+    else if(state.tool==="writer"){
+      if(!p) throw Error("موضوع لکھیں");
+      const x = await textAI("Write a useful story/article in Urdu or Roman Urdu about: "+p);
+      $("result").innerHTML = "<pre>"+esc(x)+"</pre>";
+    }
+    else if(state.tool==="voice"){
+      if(!p) throw Error("Text لکھیں");
+      speak(p);
+      $("result").innerHTML = "<p>🔊 آواز چل رہی ہے۔</p><button class='alt' onclick='speechSynthesis.cancel()'>Stop</button>";
+    }
+    else if(state.tool==="translate"){
+      if(!p) throw Error("Text لکھیں");
+      $("result").innerHTML = "<pre>"+esc(await translate(p))+"</pre>";
+    }
+    else if(state.tool==="upscale"){
+      const f = $("file").files[0];
+      if(!f) throw Error("Image upload کریں");
+      const im = new Image();
+      im.onload = () => {
+        const c = document.createElement("canvas");
+        c.width = im.width*2; c.height = im.height*2;
+        c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+        showImage(c.toDataURL("image/jpeg",.9),"2× Upscaled Image");
+      };
+      im.src = URL.createObjectURL(f);
+    }
+    else if(state.tool==="video"){
+      if(!p) throw Error("Story لکھیں");
+
+      const duration = Math.max(300, Number($("videoDuration").value || 300));
+      const sceneCount = Math.max(20, Math.ceil(duration / 15));
+
+      $("status").textContent = "⏳ 5+ minute storyboard + voice script تیار ہو رہا ہے...";
+      const prompt = `Create a ${Math.ceil(duration/60)} minute story video plan in Urdu/Roman Urdu.
+Split it into exactly ${sceneCount} scenes, about 15 seconds each.
+Return ONLY JSON array. Each item must have: "visual" (short English image prompt, no text in image) and
+"voice" (2-3 natural Urdu/Roman Urdu sentences suitable for narration).
+Story: ${p}`;
+
+      const raw = await textAI(prompt);
+      let plan;
+      try {
+        const match = raw.match(/\[[\s\S]*\]/);
+        plan = JSON.parse(match ? match[0] : raw);
+      } catch(e) {
+        // Fallback: make a playable 5-minute plan from the supplied story.
+        plan = Array.from({length: sceneCount}, (_,i)=>({
+          visual: `${p}, cinematic story scene ${i+1}, consistent characters, high quality`,
+          voice: `یہ کہانی کا منظر نمبر ${i+1} ہے۔ ${p}`
+        }));
+      }
+
+      if(!Array.isArray(plan) || !plan.length) throw Error("Video plan نہیں بن سکا");
+      state.videoPlan = plan.slice(0, sceneCount).map((x,i)=>({
+        visual: String(x.visual || `${p}, cinematic scene ${i+1}`),
+        voice: String(x.voice || p)
+      }));
+
+      $("videoControls").classList.remove("hide");
+      $("result").innerHTML = `<h3>🎬 ${Math.ceil(duration/60)} منٹ کی Story Video</h3>
+        <p>${state.videoPlan.length} scenes + voice narration تیار ہے۔</p>`;
+      $("videoStage").innerHTML = "";
+      $("status").textContent = "✅ Video plan تیار ہے۔ Play Video + Voice دبائیں۔";
+    }
+    await logUsage(state.tool);
+    $("status").textContent = "✅ Done";
+  }catch(e){
+    console.error(e);
+    $("status").textContent = "❌ " + (e.message || "Error");
+  }
+};
+
+
+let videoObjectUrls = [];
+
+
+let videoObjectUrls = [];
+let renderedVideoBlob = null;
+
+function wait(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+function speakAndWait(text){
+  return new Promise(resolve => {
+    if(!("speechSynthesis" in window)){ resolve(); return; }
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = /[\u0600-\u06ff]/.test(text) ? "ur-PK" : "en-US";
+    u.rate = 0.95;
+    u.onend = resolve;
+    u.onerror = resolve;
+    speechSynthesis.speak(u);
+  });
+}
+
+async function renderStoryVideo(){
+  if(!state.videoPlan.length) throw Error("پہلے Story Video generate کریں");
+
+  const canvas = document.createElement("canvas");
+  canvas.width = 1280; canvas.height = 720;
+  const ctx = canvas.getContext("2d");
+  const stream = canvas.captureStream(30);
+
+  // Browser-compatible video recording; WebM is used because it is natively recordable.
+  const mimeTypes = [
+    "video/webm;codecs=vp9,opus",
+    "video/webm;codecs=vp8,opus",
+    "video/webm"
+  ];
+  const mime = mimeTypes.find(x => MediaRecorder.isTypeSupported(x)) || "";
+  if(!mime) throw Error("اس browser میں video recording supported نہیں");
+
+  const recorder = new MediaRecorder(stream, {mimeType:mime, videoBitsPerSecond:4000000});
+  const chunks = [];
+  recorder.ondataavailable = e => { if(e.data.size) chunks.push(e.data); };
+
+  const done = new Promise(resolve => {
+    recorder.onstop = () => resolve(new Blob(chunks, {type:mime}));
+  });
+
+  recorder.start(1000);
+
+  const sceneMs = 15000; // 15 seconds per scene = 5 minutes for 20 scenes
+  for(let i=0; i<state.videoPlan.length; i++){
+    const item = state.videoPlan[i];
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = imageURL(item.visual, $("style").value);
+    await new Promise(resolve => { img.onload=resolve; img.onerror=resolve; });
+
+    $("sceneCounter").textContent = `Scene ${i+1} / ${state.videoPlan.length}`;
+    $("sceneVoice").textContent = item.voice;
+
+    const t0 = performance.now();
+    while(performance.now() - t0 < sceneMs){
+      const elapsed = performance.now() - t0;
+      const pct = Math.min(100, elapsed/sceneMs*100);
+
+      ctx.fillStyle = "#080b12";
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+
+      if(img.complete && img.naturalWidth){
+        const scale = Math.max(canvas.width/img.naturalWidth, canvas.height/img.naturalHeight);
+        const w = img.naturalWidth*scale, h = img.naturalHeight*scale;
+        ctx.drawImage(img, (canvas.width-w)/2, (canvas.height-h)/2, w, h);
+      }
+
+      // Readable caption area.
+      ctx.fillStyle = "rgba(0,0,0,.65)";
+      ctx.fillRect(0, canvas.height-125, canvas.width, 125);
+      ctx.fillStyle = "#fff";
+      ctx.font = "28px Arial";
+      ctx.textAlign = "center";
+      const words = item.voice.split(/\s+/);
+      let line="", lines=[];
+      for(const word of words){
+        const test = line ? line+" "+word : word;
+        if(ctx.measureText(test).width > 1120){
+          lines.push(line); line=word;
+        } else line=test;
+      }
+      if(line) lines.push(line);
+      lines.slice(-3).forEach((ln,j)=>ctx.fillText(ln, canvas.width/2, canvas.height-82+j*34));
+
+      $("sceneProgress").style.width = pct+"%";
+      await new Promise(requestAnimationFrame);
+    }
+
+    // Voice is played during the scene; wait only up to the scene boundary.
+    speechSynthesis.cancel();
+    speakAndWait(item.voice);
+  }
+
+  speechSynthesis.cancel();
+  recorder.stop();
+  renderedVideoBlob = await done;
+  return renderedVideoBlob;
+}
+
+async function playStoryVideo(){
+  if(!state.videoPlan.length) return $("status").textContent = "❌ پہلے Story Video generate کریں";
+  stopStoryVideo();
+  $("status").textContent = "⏳ اصل video render ہو رہی ہے... یہ 5+ منٹ لے سکتی ہے";
+  $("videoStage").innerHTML = `<div class="video-stage">
+    <canvas id="previewCanvas" width="1280" height="720" style="width:100%;border-radius:10px"></canvas>
+    <div class="video-caption" id="sceneVoice"></div>
+    <div class="progress"><i id="sceneProgress"></i></div>
+    <div class="note" id="sceneCounter"></div>
+  </div>`;
+
+  try{
+    const blob = await renderStoryVideo();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "raza-ai-story-video.webm";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 60000);
+    $("status").textContent = "✅ 5+ minute video تیار ہے اور download شروع ہو گیا";
+  }catch(e){
+    $("status").textContent = "❌ "+(e.message||"Video render error");
+  }
+}
+
+function stopStoryVideo(){
+  state.videoRunning = false;
+  if(state.videoTimer) cancelAnimationFrame(state.videoTimer);
+  state.videoTimer = null;
+  if("speechSynthesis" in window) speechSynthesis.cancel();
+}
+
+$("playVideo").onclick = playStoryVideo;
+$("stopVideo").onclick = stopStoryVideo;
+$("downloadVideo").onclick = () => {
+  if(!renderedVideoBlob) return $("status").textContent = "❌ پہلے Play Video سے video render کریں";
+  const url = URL.createObjectURL(renderedVideoBlob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "raza-ai-story-video.webm";
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(url), 60000);
+};
+
+$("clear").onclick = () => {
+  stopStoryVideo();
+  renderedVideoBlob = null;
+  $("prompt").value = "";
+  $("result").innerHTML = "";
+  $("status").textContent = "";
+};
+
+setPlaceholder();
+initSupabase();
+</script>
+</body>
+</html>
