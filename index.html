@@ -1,74 +1,190 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Hassan.com</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Studio</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
-nav{position:sticky;top:0;background:#fff;padding:16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px #ddd;z-index:10}
-.logo{font-size:25px;font-weight:800}nav a{margin-left:12px;text-decoration:none;color:#172033}
-.hero{text-align:center;padding:80px 20px;background:linear-gradient(135deg,#eef2ff,#fff)}
-.hero h1{font-size:44px}.hero h1 span{color:#315efb}.hero p{max-width:720px;margin:20px auto;line-height:1.7;font-size:19px;color:#596274}
-.btn{display:inline-block;padding:14px 22px;border-radius:10px;text-decoration:none;font-weight:bold;margin:5px}.primary{background:#315efb;color:white}.light{background:white;color:#172033;border:1px solid #ddd}
-section{padding:60px 20px;text-align:center}section h2{font-size:34px}.grid{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}.card{background:#fff;border:1px solid #e4e7ef;border-radius:16px;padding:25px;width:280px}
-footer{padding:28px;text-align:center;background:#202a3a;color:#fff}.whatsapp{position:fixed;right:18px;bottom:18px;background:#20b35b;color:#fff;padding:18px 25px;border-radius:35px;text-decoration:none;font-weight:bold}
-#admin{display:none;min-height:100vh;padding:25px;background:#eef1f7}.panel{max-width:900px;margin:auto;background:#fff;padding:25px;border-radius:16px}
-input,textarea{width:100%;padding:12px;margin:7px 0 15px;border:1px solid #ccd2dd;border-radius:9px;font:inherit}textarea{min-height:90px}
-.adminbtn{padding:12px 18px;border:0;border-radius:9px;background:#315efb;color:#fff;font-weight:bold;margin:4px;cursor:pointer}.danger{background:#c62828}.hidden{display:none}.item{border:1px solid #ddd;padding:12px;border-radius:10px;margin:8px 0}
-@media(max-width:650px){nav{display:block}nav a{display:inline-block;margin:10px 8px 0 0}.hero h1{font-size:36px}}
+*{box-sizing:border-box}body{margin:0;background:#080b12;color:#f5f7fb;font-family:system-ui,Arial,sans-serif}
+header{height:64px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #263044;position:sticky;top:0;background:#080b12ee;z-index:5}
+.logo{font-size:20px;font-weight:800}.logo b{color:#8b7cff}nav{display:flex;gap:18px}nav a{color:#9ca8bc;text-decoration:none}
+.hero{text-align:center;padding:65px 20px 35px}.tag{color:#aaa1ff;font-size:12px;font-weight:800;letter-spacing:2px}
+h1{font-size:clamp(42px,8vw,72px);line-height:1;margin:12px 0;background:linear-gradient(90deg,#fff,#a9a2ff);color:transparent;background-clip:text}
+.hero p{max-width:650px;margin:18px auto;color:#9ca8bc;font-size:17px}.container{max-width:1050px;margin:auto;padding:15px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.tool{background:#111722;border:1px solid #263044;border-radius:18px;padding:20px;cursor:pointer}
+.icon{font-size:28px}.tool h3{margin:12px 0 5px}.tool p{color:#9ca8bc;font-size:13px;margin:0}
+.panel{margin-top:22px;background:#111722;border:1px solid #263044;border-radius:20px;padding:22px}.panel h2{margin-top:0}
+textarea,input,select{width:100%;background:#080b12;border:1px solid #263044;border-radius:12px;color:#fff;padding:13px;font:inherit}textarea{min-height:125px;resize:vertical}
+.row{display:flex;gap:10px;flex-wrap:wrap}.field{flex:1;min-width:180px}button{border:0;border-radius:11px;padding:12px 16px;font-weight:800;cursor:pointer}.primary{background:#fff;color:#090b10}.dark{background:#1a2130;color:#fff;border:1px solid #263044}
+.output{margin-top:15px;padding:18px;border:1px dashed #39445a;border-radius:14px;color:#9ca8bc;min-height:70px}.adminbox{display:none}.adminbox.show{display:block}
+.notice{padding:13px;border-radius:12px;background:#171e2b;color:#cbd4e4;margin-top:12px}footer{text-align:center;padding:45px 20px;color:#69758a;font-size:12px}.hidden{display:none!important}
+@media(max-width:750px){nav{display:none}.grid{grid-template-columns:1fr 1fr}}@media(max-width:480px){.grid{grid-template-columns:1fr}}
+
+.adminbox{display:none}.adminbox.show{display:block}.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}.stat{background:#0b1019;border:1px solid #263044;border-radius:14px;padding:15px}.stat b{display:block;font-size:25px}.stat span{font-size:12px;color:#9ca8bc}.table-wrap{overflow-x:auto;border:1px solid #263044;border-radius:14px}.table-wrap table{width:100%;border-collapse:collapse;min-width:760px}.table-wrap th,.table-wrap td{padding:12px;border-bottom:1px solid #263044;text-align:left;font-size:13px}.table-wrap th{color:#9ca8bc;font-weight:600;background:#0d121b}.table-wrap small{display:block;color:#69758a;margin-top:3px}.pill{display:inline-block;padding:5px 8px;border-radius:20px;font-size:11px}.active,.allowed,.paid{background:#17301f;color:#8ee6a4}.blocked,.denied{background:#321a20;color:#ff9ba7}.unpaid{background:#302b18;color:#f1d47c}.actions{display:flex;gap:5px;flex-wrap:wrap}.mini{padding:7px 9px;font-size:11px;background:#1a2130;color:#fff;border:1px solid #303a4d}.permissions{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0 15px}.permissions label{padding:11px;background:#0b1019;border:1px solid #263044;border-radius:10px;color:#cbd4e4}.permissions input{width:auto;margin-right:8px}@media(max-width:600px){.admin-stats{grid-template-columns:1fr 1fr}.permissions{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div id="site">
-<nav><div class="logo" id="siteName">Hassan.com</div><div>
-<a href="#home">Home</a><a href="#about">About</a><a href="#services">Services</a><a href="#projects">Projects</a><a href="#contact">Contact</a>
-</div></nav>
-<section class="hero" id="home"><div>Welcome to my website</div><h1>Hi, I'm <span id="owner">Hassan</span></h1>
-<p id="intro">Welcome to Hassan.com. This is my personal website where I can share my work, services and projects.</p>
-<a class="btn primary" href="#services">View Services</a><a class="btn light" href="#contact">Contact Me</a></section>
-<section id="about"><h2>About Me</h2><p id="aboutText">I am learning web development and building my own projects step by step.</p></section>
-<section id="services"><h2>Services</h2><div class="grid" id="servicesGrid"></div></section>
-<section id="projects"><h2>Projects</h2><div class="grid" id="projectsGrid"></div></section>
-<section id="contact"><h2>Contact</h2><p>Email: <span id="email">your@email.com</span></p></section>
-<a class="whatsapp" id="waBtn" href="#" target="_blank">WhatsApp</a>
-<footer>© <span id="year"></span> <span id="footerName">Hassan.com</span></footer>
+<header><div class="logo">✨ <b>AI</b> Studio</div><nav><a href="#tools">Tools</a><a href="#admin">Admin</a></nav></header>
+<section class="hero"><div class="tag">ALL-IN-ONE AI PLATFORM</div><h1>Create Anything<br>With AI</h1><p>Images, cartoons, video, writing, chat and more.</p></section>
+<main class="container">
+<section id="tools" class="grid">
+<div class="tool" onclick="openTool('image')"><div class="icon">🖼️</div><h3>AI Image</h3><p>Text to image</p></div>
+<div class="tool" onclick="openTool('cartoon')"><div class="icon">🎨</div><h3>AI Cartoon</h3><p>Cartoon creation</p></div>
+<div class="tool" onclick="openTool('video')"><div class="icon">🎬</div><h3>AI Video</h3><p>Text to video</p></div>
+<div class="tool" onclick="openTool('chat')"><div class="icon">🤖</div><h3>AI Chat</h3><p>AI assistant</p></div>
+<div class="tool" onclick="openTool('writer')"><div class="icon">✍️</div><h3>AI Writer</h3><p>Writing tools</p></div>
+<div class="tool" onclick="openTool('voice')"><div class="icon">🗣️</div><h3>Text to Voice</h3><p>Voice generation</p></div>
+<div class="tool" onclick="openTool('remove')"><div class="icon">🪄</div><h3>Background Remover</h3><p>Remove backgrounds</p></div>
+<div class="tool" onclick="openTool('upscale')"><div class="icon">🔍</div><h3>Image Upscaler</h3><p>Improve resolution</p></div>
+<div class="tool" onclick="openTool('translate')"><div class="icon">🌐</div><h3>Translator</h3><p>Translate text</p></div>
+</section>
+
+<section class="panel" id="workspace">
+<h2 id="toolTitle">Select an AI tool</h2><p id="toolDesc" style="color:#9ca8bc">Choose a tool above.</p>
+<textarea id="prompt" placeholder="Write your prompt here..."></textarea><br><br>
+<div class="row"><select class="field" id="style"><option>Default</option><option>Photorealistic</option><option>3D Cartoon</option><option>Anime</option><option>Cinematic</option></select><button class="primary" onclick="runTool()">Generate / Run</button></div>
+<div id="output" class="output">Your result will appear here.</div>
+</section>
+
+<section class="panel" id="admin">
+<h2>🛡️ Admin Control Center</h2>
+<p style="color:#9ca8bc">Manage users, access, plans and AI tools from one dashboard.</p>
+
+<div class="row">
+  <input class="field" id="adminPassword" type="password" placeholder="Admin password">
+  <button class="primary" onclick="adminLogin()">Admin Login</button>
 </div>
 
-<div id="admin"><div class="panel"><h1>Hassan.com Admin Panel</h1>
-<div id="loginBox"><p>Login to manage your website.</p><input id="loginUser" placeholder="Username"><input id="loginPass" type="password" placeholder="Password">
-<button class="adminbtn" onclick="login()">Login</button><p id="loginError" style="color:#c62828"></p></div>
-<div id="editor" class="hidden">
-<h2>Website Information</h2>
-<label>Website Name</label><input id="aSiteName"><label>Owner Name</label><input id="aOwner">
-<label>Intro</label><textarea id="aIntro"></textarea><label>About</label><textarea id="aAbout"></textarea>
-<label>Email</label><input id="aEmail"><label>WhatsApp Number (example: 923001234567)</label><input id="aWhatsapp">
-<h2>Services</h2><div id="serviceEditor"></div><button class="adminbtn" onclick="addService()">+ Add Service</button>
-<h2>Projects</h2><div id="projectEditor"></div><button class="adminbtn" onclick="addProject()">+ Add Project</button><br><br>
-<button class="adminbtn" onclick="saveData()">Save Changes</button><button class="adminbtn light" onclick="showSite()">View Website</button><button class="adminbtn danger" onclick="logout()">Logout</button>
-<p id="saved" style="color:green"></p>
-</div></div></div>
+<div id="adminBox" class="adminbox">
+  <div class="notice">✅ Admin mode active</div>
 
+  <div class="admin-stats">
+    <div class="stat"><b id="totalUsers">4</b><span>Total Users</span></div>
+    <div class="stat"><b id="activeUsers">3</b><span>Active</span></div>
+    <div class="stat"><b id="paidUsers">2</b><span>Paid</span></div>
+    <div class="stat"><b id="blockedUsers">1</b><span>Blocked</span></div>
+  </div>
+
+  <h3>👥 User Management</h3>
+  <div class="table-wrap">
+    <table id="usersTable">
+      <thead><tr><th>User</th><th>Status</th><th>Plan</th><th>AI Permission</th><th>Actions</th></tr></thead>
+      <tbody>
+        <tr data-user="Ali">
+          <td><b>Ali</b><small>ali@example.com</small></td>
+          <td class="statusCell"><span class="pill active">Active</span></td>
+          <td class="planCell"><span class="pill paid">Paid</span></td>
+          <td><span class="pill allowed">Allowed</span></td>
+          <td class="actions">
+            <button class="mini" onclick="toggleUser(this)">Block</button>
+            <button class="mini" onclick="togglePlan(this)">Make Unpaid</button>
+            <button class="mini" onclick="togglePermission(this)">Remove AI</button>
+          </td>
+        </tr>
+        <tr data-user="Hassan">
+          <td><b>Hassan</b><small>hassan@example.com</small></td>
+          <td class="statusCell"><span class="pill active">Active</span></td>
+          <td class="planCell"><span class="pill unpaid">Unpaid</span></td>
+          <td><span class="pill allowed">Allowed</span></td>
+          <td class="actions">
+            <button class="mini" onclick="toggleUser(this)">Block</button>
+            <button class="mini" onclick="togglePlan(this)">Make Paid</button>
+            <button class="mini" onclick="togglePermission(this)">Remove AI</button>
+          </td>
+        </tr>
+        <tr data-user="Usman">
+          <td><b>Usman</b><small>usman@example.com</small></td>
+          <td class="statusCell"><span class="pill blocked">Blocked</span></td>
+          <td class="planCell"><span class="pill unpaid">Unpaid</span></td>
+          <td><span class="pill denied">Denied</span></td>
+          <td class="actions">
+            <button class="mini" onclick="toggleUser(this)">Unblock</button>
+            <button class="mini" onclick="togglePlan(this)">Make Paid</button>
+            <button class="mini" onclick="togglePermission(this)">Allow AI</button>
+          </td>
+        </tr>
+        <tr data-user="Ayesha">
+          <td><b>Ayesha</b><small>ayesha@example.com</small></td>
+          <td class="statusCell"><span class="pill active">Active</span></td>
+          <td class="planCell"><span class="pill paid">Paid</span></td>
+          <td><span class="pill allowed">Allowed</span></td>
+          <td class="actions">
+            <button class="mini" onclick="toggleUser(this)">Block</button>
+            <button class="mini" onclick="togglePlan(this)">Make Unpaid</button>
+            <button class="mini" onclick="togglePermission(this)">Remove AI</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>🤖 AI Tool Permissions</h3>
+  <div class="permissions">
+    <label><input type="checkbox" checked> AI Image</label>
+    <label><input type="checkbox" checked> AI Cartoon</label>
+    <label><input type="checkbox" checked> AI Video</label>
+    <label><input type="checkbox" checked> AI Chat</label>
+    <label><input type="checkbox" checked> AI Writer</label>
+    <label><input type="checkbox" checked> Text to Voice</label>
+    <label><input type="checkbox" checked> Background Remover</label>
+    <label><input type="checkbox" checked> Image Upscaler</label>
+  </div>
+  <button class="primary" onclick="saveSettings()">Save AI Permissions</button>
+
+  <h3>💳 User Plan</h3>
+  <div class="row">
+    <select id="planSelect" class="field">
+      <option>Free</option><option>Paid</option><option>VIP</option><option>Admin</option>
+    </select>
+    <button class="dark" onclick="alert('Plan saved for the selected user in this demo.')">Save Plan</button>
+  </div>
+
+  <h3>⚙️ Website Controls</h3>
+  <div class="row">
+    <button class="dark" onclick="toggleTools()">Show / Hide AI Tools</button>
+    <button class="dark" onclick="maintenance()">Maintenance Mode</button>
+    <button class="dark" onclick="alert('Real user database should be connected here.')">Database</button>
+  </div>
+</div>
+</section>
+</main>
+<footer>AI Studio · GitHub Pages starter</footer>
 <script>
-const DEFAULT={siteName:"Hassan.com",owner:"Hassan",intro:"Welcome to Hassan.com. This is my personal website where I can share my work, services and projects.",about:"I am learning web development and building my own projects step by step.",email:"your@email.com",whatsapp:"",services:["Web Development","Data Entry","Typing and Data Entry Services"],projects:["My Website","Hassan.com personal website"]};
-let data=JSON.parse(localStorage.getItem("hassanData")||"null")||DEFAULT;
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
-function render(){
-siteName.textContent=data.siteName;footerName.textContent=data.siteName;owner.textContent=data.owner;intro.textContent=data.intro;aboutText.textContent=data.about;email.textContent=data.email;year.textContent=new Date().getFullYear();
-servicesGrid.innerHTML=data.services.map(x=>'<div class="card"><h3>'+esc(x)+'</h3><p>Professional service available.</p></div>').join("");
-projectsGrid.innerHTML=data.projects.map(x=>'<div class="card"><h3>'+esc(x)+'</h3><p>My project and work.</p></div>').join("");
-let n=(data.whatsapp||"").replace(/\D/g,"");waBtn.href=n?"https://wa.me/"+n:"#";
+let currentTool="";
+const titles={image:["AI Image Generator","Describe your image."],cartoon:["AI Cartoon Generator","Describe your cartoon."],video:["AI Video Generator","Describe your video."],chat:["AI Chat","Ask your AI assistant."],writer:["AI Writer","Tell the AI what to write."],voice:["Text to Voice","Enter text for voice."],remove:["Background Remover","Image processing tool."],upscale:["Image Upscaler","Image enhancement tool."],translate:["AI Translator","Enter text and target language."]};
+function openTool(t){currentTool=t;toolTitle.textContent=titles[t][0];toolDesc.textContent=titles[t][1];prompt.placeholder="Write your prompt here...";output.textContent="Ready.";location.hash="workspace"}
+function runTool(){const p=prompt.value.trim();if(!p){output.textContent="Please enter a prompt first.";return}if(currentTool==="image"||currentTool==="cartoon"){output.textContent="Generating image...";const q=encodeURIComponent(p+", "+style.value);const url="https://image.pollinations.ai/prompt/"+q+"?width=768&height=768&nologo=true&seed="+Math.floor(Math.random()*999999);output.innerHTML='<img style="max-width:100%;border-radius:12px" src="'+url+'" alt="AI image" onerror="this.parentElement.textContent=\'Image service unavailable.\'">'}else output.textContent="Interface ready. Connect a secure AI API/backend for real "+titles[currentTool][0]+"."}
+function adminLogin(){
+if(adminPassword.value==="admin-demo"){adminBox.classList.add("show");alert("Admin panel unlocked.");}
+else alert("Demo password incorrect.");
 }
-function openAdmin(){site.style.display="none";admin.style.display="block";scrollTo(0,0)}
-function showSite(){admin.style.display="none";site.style.display="block";history.replaceState(null,"",location.pathname);render()}
-function login(){if(loginUser.value==="admin"&&loginPass.value==="12345"){loginBox.classList.add("hidden");editor.classList.remove("hidden");loadAdmin()}else loginError.textContent="Wrong username or password."}
-function loadAdmin(){aSiteName.value=data.siteName;aOwner.value=data.owner;aIntro.value=data.intro;aAbout.value=data.about;aEmail.value=data.email;aWhatsapp.value=data.whatsapp;draw("serviceEditor",data.services,"service");draw("projectEditor",data.projects,"project")}
-function draw(id,arr,type){document.getElementById(id).innerHTML=arr.map((x,i)=>'<div class="item"><input data-type="'+type+'" value="'+esc(x)+'"><button class="adminbtn danger" onclick="removeItem(\''+type+'\','+i+')">Remove</button></div>').join("")}
-function collect(type){return [...document.querySelectorAll('[data-type="'+type+'"]')].map(e=>e.value.trim()).filter(Boolean)}
-function addService(){data.services.push("New Service");loadAdmin()}function addProject(){data.projects.push("New Project");loadAdmin()}
-function removeItem(type,i){data[type==="service"?"services":"projects"].splice(i,1);loadAdmin()}
-function saveData(){data.siteName=aSiteName.value||"Hassan.com";data.owner=aOwner.value||"Hassan";data.intro=aIntro.value;data.about=aAbout.value;data.email=aEmail.value;data.whatsapp=aWhatsapp.value;data.services=collect("service");data.projects=collect("project");localStorage.setItem("hassanData",JSON.stringify(data));render();saved.textContent="Changes saved on this browser."}
-function logout(){location.hash="";location.reload()}
-render();if(location.hash.toLowerCase()==="#admin")openAdmin();
+function toggleUser(btn){
+const row=btn.closest("tr"), cell=row.querySelector(".statusCell"), pill=cell.querySelector(".pill");
+if(pill.classList.contains("blocked")){pill.className="pill active";pill.textContent="Active";btn.textContent="Block";}
+else{pill.className="pill blocked";pill.textContent="Blocked";btn.textContent="Unblock";}
+updateStats();
+}
+function togglePlan(btn){
+const row=btn.closest("tr"), cell=row.querySelector(".planCell"), pill=cell.querySelector(".pill");
+if(pill.classList.contains("paid")){pill.className="pill unpaid";pill.textContent="Unpaid";btn.textContent="Make Paid";}
+else{pill.className="pill paid";pill.textContent="Paid";btn.textContent="Make Unpaid";}
+updateStats();
+}
+function togglePermission(btn){
+const row=btn.closest("tr"), pill=row.cells[3].querySelector(".pill");
+if(pill.classList.contains("allowed")){pill.className="pill denied";pill.textContent="Denied";btn.textContent="Allow AI";}
+else{pill.className="pill allowed";pill.textContent="Allowed";btn.textContent="Remove AI";}
+}
+function updateStats(){
+const rows=[...document.querySelectorAll("#usersTable tbody tr")];
+totalUsers.textContent=rows.length;
+activeUsers.textContent=rows.filter(r=>r.querySelector(".statusCell .pill").classList.contains("active")).length;
+paidUsers.textContent=rows.filter(r=>r.querySelector(".planCell .pill").classList.contains("paid")).length;
+blockedUsers.textContent=rows.filter(r=>r.querySelector(".statusCell .pill").classList.contains("blocked")).length;
+}
+function saveSettings(){alert("AI tool permissions saved in this demo.")}
+function toggleTools(){tools.classList.toggle("hidden")}
+function maintenance(){document.body.innerHTML='<div style="font-family:system-ui;text-align:center;padding:25vh 20px"><h1>🔧 Maintenance Mode</h1><p>Website temporarily unavailable.</p><button onclick="location.reload()">Return</button></div>'}
 </script>
-</body></html>
+</body>
+</html>
