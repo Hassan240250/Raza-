@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Raza AI Studio</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#0b1020;color:#fff}
+header{padding:18px 16px;background:#111936;position:sticky;top:0;z-index:2}
+h1{margin:0;font-size:22px}.sub{color:#aeb8d6;font-size:13px;margin-top:5px}
+main{max-width:900px;margin:auto;padding:18px}.card{background:#121a35;border:1px solid #29345c;border-radius:16px;padding:16px;margin-bottom:15px}
+input,textarea,select,button{width:100%;padding:12px;border-radius:10px;border:1px solid #39466f;background:#0c1329;color:#fff;margin:6px 0}
+button{background:#3857ff;border:0;font-weight:bold;cursor:pointer}.danger{background:#9d2638}.ok{background:#16875c}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}.tool{min-height:85px}
+#status{white-space:pre-wrap;color:#cbd5ff}.hidden{display:none}
+small{color:#9eabd0}a{color:#91a8ff}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<header><h1>Raza AI Studio</h1><div class="sub">Real backend-ready AI platform • GitHub Pages</div></header>
+<main>
+<div class="card">
+<h2>Account</h2>
+<input id="email" type="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+<div class="grid"><button onclick="signup()">Create account</button><button onclick="login()">Login</button><button class="danger" onclick="logout()">Logout</button></div>
+<div id="user"></div>
+</div>
+
+<div class="card">
+<h2>AI Tools</h2>
+<div class="grid">
+<button class="tool" onclick="openTool('chat')">💬 AI Chat</button>
+<button class="tool" onclick="openTool('writer')">✍️ AI Writer</button>
+<button class="tool" onclick="openTool('image')">🖼️ AI Image</button>
+<button class="tool" onclick="openTool('translator')">🌐 Translator</button>
+<button class="tool" onclick="openTool('voice')">🔊 Text to Voice</button>
+<button class="tool" onclick="openTool('cartoon')">🎨 AI Cartoon</button>
+<button class="tool" onclick="openTool('upscale')">🔍 Upscaler</button>
+<button class="tool" onclick="openTool('story')">🎬 Story Scene</button>
+</div>
+<small>AI generation is routed through a Supabase Edge Function. No secret API key is stored in this page.</small>
+</div>
+
+<div class="card" id="workspace">
+<h2>Workspace</h2>
+<p>Select a tool above.</p>
+<div id="toolbox"></div>
+<div id="result"></div>
+</div>
+
+<div class="card">
+<h2>System</h2>
+<div id="status">Checking configuration...</div>
+</div>
+</main>
+
+<script>
+const SUPABASE_URL="https://soyysvqxsu2ngchnksvt.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
+const FUNCTION_NAME="ai-gateway";
+let sb=null;
+
+function setStatus(s){document.getElementById("status").textContent=s}
+function configured(){return !SUPABASE_PUBLISHABLE_KEY.includes("PASTE_YOUR")}
+if(configured()){
+ sb=supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+ sb.auth.onAuthStateChange((_e,session)=>showUser(session));
+ showUser();
+ setStatus("Supabase connected. Add the publishable key and deploy the ai-gateway Edge Function for live AI.");
+}else setStatus("Setup required: add your Supabase publishable key in this file. Never put a service-role/secret key here.");
+
+async function signup(){
+ if(!sb)return alert("Supabase key is not configured.");
+ const {data,error}=await sb.auth.signUp({email:email.value,password:password.value});
+ if(error)return alert(error.message);
+ alert("Account created. If email confirmation is enabled, check your email.");
+ showUser(data.session);
+}
+async function login(){
+ if(!sb)return alert("Supabase key is not configured.");
+ const {data,error}=await sb.auth.signInWithPassword({email:email.value,password:password.value});
+ if(error)return alert(error.message);
+ showUser(data.session);
+}
+async function logout(){if(sb)await sb.auth.signOut();showUser(null)}
+async function showUser(session){
+ if(!sb)return;
+ if(!session){user.textContent="Not logged in";return}
+ user.textContent="Logged in: "+(session.user.email||"");
+}
+
+function openTool(type){
+ const names={chat:"AI Chat",writer:"AI Writer",image:"AI Image",translator:"Translator",voice:"Text to Voice",cartoon:"AI Cartoon",upscale:"Image Upscaler",story:"Story Scene"};
+ toolbox.innerHTML="";
+ result.innerHTML="";
+ const t=names[type];
+ const label=document.createElement("h3");label.textContent=t;toolbox.appendChild(label);
+ if(["chat","writer","image","cartoon","story"].includes(type)){
+   const ta=document.createElement("textarea");ta.id="prompt";ta.rows=6;ta.placeholder=
+     type==="chat"?"Ask anything...":type==="writer"?"What should I write?":
+     type==="story"?"Describe your story scene...":"Describe the image you want...";
+   toolbox.appendChild(ta);
+   const b=document.createElement("button");b.textContent= type==="image"||type==="cartoon"||type==="story"?"Generate image":"Generate";b.onclick=()=>runAI(type);toolbox.appendChild(b);
+ } else if(type==="translator"){
+   const ta=document.createElement("textarea");ta.id="prompt";ta.rows=5;ta.placeholder="Enter text...";
+   const sel=document.createElement("select");sel.id="lang";
+   ["ur","en","ar","hi","tr","it","fr","de"].forEach(x=>{let o=document.createElement("option");o.value=x;o.textContent=x;sel.appendChild(o)});
+   toolbox.appendChild(ta);toolbox.appendChild(sel);
+   const b=document.createElement("button");b.textContent="Translate";b.onclick=()=>translateText();toolbox.appendChild(b);
+ } else if(type==="voice"){
+   const ta=document.createElement("textarea");ta.id="prompt";ta.rows=6;ta.placeholder="Enter text for voice...";
+   toolbox.appendChild(ta);const b=document.createElement("button");b.textContent="Speak";b.onclick=()=>{speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(ta.value))};toolbox.appendChild(b);
+ } else if(type==="upscale"){
+   const inp=document.createElement("input");inp.type="file";inp.accept="image/*";inp.id="upfile";
+   const b=document.createElement("button");b.textContent="Upscale 2x";b.onclick=upscale;toolbox.appendChild(inp);toolbox.appendChild(b);
+ }
+}
+
+async function runAI(type){
+ const p=document.getElementById("prompt").value.trim(); if(!p)return alert("Text enter karein.");
+ if(!sb)return alert("Supabase key configure karein.");
+ const {data:{session}}=await sb.auth.getSession();
+ if(!session)return alert("Pehle login karein.");
+ result.textContent="Generating...";
+ const {data,error}=await sb.functions.invoke(FUNCTION_NAME,{body:{tool:type,prompt:p}});
+ if(error){result.textContent="Real backend error: "+error.message;return}
+ if(data?.image_url){result.innerHTML='<img style="max-width:100%;border-radius:12px" src="'+data.image_url+'"><p>'+escapeHtml(data.message||"")+'</p>'}
+ else result.textContent=data?.text||data?.message||JSON.stringify(data);
+}
+async function translateText(){
+ const p=document.getElementById("prompt").value.trim();if(!p)return;
+ result.textContent="Translating...";
+ try{const r=await fetch("https://api.mymemory.translated.net/get?q="+encodeURIComponent(p)+"&langpair=auto|"+lang.value);const d=await r.json();result.textContent=d.responseData?.translatedText||"Translation failed";}catch(e){result.textContent=e.message}
+}
+function upscale(){
+ const f=document.getElementById("upfile").files[0];if(!f)return alert("Image select karein.");
+ const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=im.width*2;c.height=im.height*2;c.getContext("2d").drawImage(im,0,0,c.width,c.height);result.innerHTML='<img style="max-width:100%;border-radius:12px" src="'+c.toDataURL("image/png")+'"><p>2x client-side upscale complete.</p>';};im.src=URL.createObjectURL(f);
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+</script>
+</body>
+</html>
